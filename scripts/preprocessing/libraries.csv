@@ -1,0 +1,9 @@
+fastqs,sample,library_type
+/xdisk/xiaosun/ranwei/bibb/scrna, C1, Gene Expression
+/xdisk/xiaosun/ranwei/bibb/scatac/C1-ATAC, C1, Chromatin Accessibility
+/xdisk/xiaosun/ranwei/bibb/scrna, C2, Gene Expression
+/xdisk/xiaosun/ranwei/bibb/scatac/C2-ATAC, C2, Chromatin Accessibility
+/xdisk/xiaosun/ranwei/bibb/scrna, T1, Gene Expression
+/xdisk/xiaosun/ranwei/bibb/scatac/T1-ATAC, T1, Chromatin Accessibility
+/xdisk/xiaosun/ranwei/bibb/scrna, T2, Gene Expression
+/xdisk/xiaosun/ranwei/bibb/scatac/T2-ATAC, T2, Chromatin Accessibility
