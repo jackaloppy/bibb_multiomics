@@ -19,7 +19,7 @@ FASTQ files are stored on Box foder. According to the SOP, they are sequencing d
   - C2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scatac_web_summary.html)
   - T1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scatac_web_summary.html)
   - T2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scatac_web_summary.html)
-- Cell Ranger ARC (ATAC + RNA)
+- Cell Ranger ARC (ATAC + RNA) (against mouse reference)
   - Only C1 was tested: [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_arc_multiome.html)
 
 
