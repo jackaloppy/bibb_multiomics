@@ -9,17 +9,18 @@ This is a repo for analyzing Dr.Bibb's multiomics project
 FASTQ files are stored on Box foder. According to the SOP, they are sequencing data produced from 10X Genomics Chromium Single Cell Multiome ATAC + Gene Expression. 
 
 ### QC reports
-- C1 Cell Ranger (RNA): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scrna_web_summary.html)
-- C2 Cell Ranger (RNA): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scrna_web_summary.html)
-- T1 Cell Ranger (RNA): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scrna_web_summary.html)
-- T2 Cell Ranger (RNA): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scrna_web_summary.html)
-
-- C1 Cell Ranger (ATAC): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scatac_web_summary.html)
-- C2 Cell Ranger (ATAC): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scatac_web_summary.html)
-- T1 Cell Ranger (ATAC): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scatac_web_summary.html)
-- T2 Cell Ranger (ATAC): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scatac_web_summary.html)
-
-- C1 Cell Ranger ARC (ATAC + RNA): [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_arc_multiome.html)
+- Cell Ranger RNA (against mouse reference)
+  - C1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scrna_web_summary.html)
+  - C2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scrna_web_summary.html)
+  - T1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scrna_web_summary.html)
+  - T2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scrna_web_summary.html)
+- Cell Ranger ATAC (against mouse reference)
+  - C1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scatac_web_summary.html)
+  - C2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scatac_web_summary.html)
+  - T1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scatac_web_summary.html)
+  - T2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scatac_web_summary.html)
+- Cell Ranger ARC (ATAC + RNA)
+  - Only C1 was tested: [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_arc_multiome.html)
 
 
 ### Preprocessing steps
