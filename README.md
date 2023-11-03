@@ -27,17 +27,25 @@ I first ran [Cell Ranger ARC pipeline](https://support.10xgenomics.com/single-ce
 
 10X has the option to analyze only the ATAC data or only the Gene Expression data from the single cell multiome experiment (See [1](https://kb.10xgenomics.com/hc/en-us/articles/360061165691-Can-I-analyze-only-the-ATAC-data-from-my-single-cell-multiome-experiment-) and [2](https://kb.10xgenomics.com/hc/en-us/articles/360059656912-Can-I-analyze-only-the-Gene-Expression-data-from-my-single-cell-multiome-experiment-)). So I analyzed them separately according to the instructions from 10X in HPC (see _c1_scatac.slurm_ and _c1_scrna.slurm_ in [folder](/scripts/preprocessing/)). However, all of them yielded poor mapping rates from the QC reports (see above). 
 
-### next steps
+### trys
 - I will assess the FASTQ file qulaity score and map the histogram across all samples, because bad quality socre could result in poor hit, causing low mapping rate. I will also try to increase the mis-match threshold in the 10x Cell Ranger pipeline to see if that increases the mapping rate. If we showed that the low mapping rate is due to low quality score, then something bad happened during the sequencing steps and nothing we can remedy that.
   - FastQC reports
     - C1-scRNA: [R1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1_S52_R1_001_fastqc.html) and [R2](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1_S52_R2_001_fastqc.html)
     - C1-scATAC: [I1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_I1_001_fastqc.html), [R1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R1_001_fastqc.html), [R2](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R2_001_fastqc.html), and [R3](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R3_001_fastqc.html)
   - From the FastQC reports we can see that the quality of sequencing is good, so we need to seek good reference transcriptome.
-- Another thing we can check is to use rat referecne. The SOP on the CyVerse folder suggests using the pre-built mouse reference from 10x, even though they are rat samples (Not sure the reasoning behind). However, 10x has the [option](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/tutorial_mr) to build a custom reference. And there are rat reference library available oneline. I will see if I can incoporate that into the pipeline, to increase the mapping rate.
 
 - I will also double check the pair matches. Specifically, check if C1(RNA) can matches C2(ATAC). 
 
 - Rudra is checking the potential microbes contamination by alinging the fastq with microbiome.
+
+### Breakthrough!!!
+Another thing we can check is to use rat referecne. The SOP on the CyVerse folder suggests using the pre-built mouse reference from 10x, even though they are rat samples (Not sure the reasoning behind). However, 10x has the [option](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/tutorial_mr) to build a custom reference. And 
+there are rat reference library available oneline. I will see if I can incoporate that into the pipeline, to increase the mapping rate.
+
+I built rat transcriptome reference using 10x tutorial, and used it to align c1-scrna sequence in cellranger count pipeline. See [QC report](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/c1_scrna_rat_web_summary.html). No low mapping rate alert. The median genes per cell is now ~1500. (Only warning _High Fraction of Reads Mapped Antisense to Genes_ is fine because as it says it's normal in single nuclei sequencing).
+
+I will finish the rest sequencing over the weekends. I'm also building a rat ARC reference which can be used to align ATAC and (ATAC+RNA multiome) files. I will upload the QC reports when I finished. Next I will import scRNA into Seurat to generate UMAP, import scATAC into Signac to generate UMAP for ATAC.
+
 
 ### on hold
 The QC reports contain UMAP automatically generated from the pipeline, though they looks pretty noisy. I will analyze the pipeline outputs in Seurat to see if I can further clean the data and produce some good UMAPs. But I think we should address the low mapping rate first.
