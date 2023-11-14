@@ -51,6 +51,7 @@ See more in [folder](/results). Then I ran UMAP and annotated the clusters based
 - Astrocytes: Gja1, Aqp4
 - Oligodendrocytes: Plp1, Mag
 - Microglia: Arhgap15, Csf1r
+- OPC: Vcan, Pdgfra
 
 Here is the annotated UMAP:
 ![scRNA annotated UMAP](/results/annotated_umap_scrna.png)
