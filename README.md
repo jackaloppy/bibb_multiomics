@@ -5,47 +5,61 @@ This is a repo for analyzing Dr.Bibb's multiomics project
 ### Data structures
 - 4 scRNA sequencing data (C1,C2,T1,T2)
 - 4 scATAC sequencing data (C1,C2,T1,T2)
+- Not sure if those are paired sample or not, but the QC reports for scATAC were not ideal, so I analyzed them separately.
 
-FASTQ files are stored on Box foder. According to the SOP, they are sequencing data produced from 10X Genomics Chromium Single Cell Multiome ATAC + Gene Expression. 
+FASTQ files are stored on Box foder. According to the SOP, they are sequencing data produced from 10X Genomics Chromium Single Cell Multiome ATAC + Gene Expression on rat. 
 
-### QC reports
-- Cell Ranger RNA (against mouse reference)
-  - C1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scrna_web_summary.html)
-  - C2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scrna_web_summary.html)
-  - T1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scrna_web_summary.html)
-  - T2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scrna_web_summary.html)
-- Cell Ranger ATAC (against mouse reference)
-  - C1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scatac_web_summary.html)
-  - C2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scatac_web_summary.html)
-  - T1 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scatac_web_summary.html)
-  - T2 : [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scatac_web_summary.html)
-- Cell Ranger ARC (ATAC + RNA) (against mouse reference)
-  - Only C1 was tested: [link](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_arc_multiome.html)
-
-### Preprocessing steps
-I first ran [Cell Ranger ARC pipeline](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/what-is-cell-ranger-arc) (v2.0.2) against mouse reference (mm10 Reference - 2020-A-2.0.0) provided by 10x. I paired the scRNA and scATAC up for each sample (i.e. C1-scATAC with C1-scRNA) and used the _cellranger_arc_template.slurm_ in [folder](/scripts/preprocessing/). The QC reports (see _C1 Cell Ranger ARC (ATAC + RNA)_ above) showed very poor results. Sepcifically, the estimated cells are reaching the upper limit of 20k and doubles the estimated cells from RNA or ATAC pipeline, suggesting barcodes are not shared between RNA and ATAC pipelines. So they are probably individual (unpaired) samples.
-
-10X has the option to analyze only the ATAC data or only the Gene Expression data from the single cell multiome experiment (See [1](https://kb.10xgenomics.com/hc/en-us/articles/360061165691-Can-I-analyze-only-the-ATAC-data-from-my-single-cell-multiome-experiment-) and [2](https://kb.10xgenomics.com/hc/en-us/articles/360059656912-Can-I-analyze-only-the-Gene-Expression-data-from-my-single-cell-multiome-experiment-)). So I analyzed them separately according to the instructions from 10X in HPC (see _c1_scatac.slurm_ and _c1_scrna.slurm_ in [folder](/scripts/preprocessing/)). However, all of them yielded poor mapping rates from the QC reports (see above). 
-
-### troubleshooting
-- I will assess the FASTQ file qulaity score and map the histogram across all samples, because bad quality socre could result in poor hit, causing low mapping rate. I will also try to increase the mis-match threshold in the 10x Cell Ranger pipeline to see if that increases the mapping rate. If we showed that the low mapping rate is due to low quality score, then something bad happened during the sequencing steps and nothing we can remedy that.
+### Rat reference libraries construction and preprocessing
+Raw data were initially ran against mouse reference as suggested by the SOP, but the mapping rates were extremely poor for all the samples. We first checked the FastQC reports to assess the quality of FASTQ files:
   - FastQC reports
     - C1-scRNA: [R1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1_S52_R1_001_fastqc.html) and [R2](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1_S52_R2_001_fastqc.html)
     - C1-scATAC: [I1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_I1_001_fastqc.html), [R1](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R1_001_fastqc.html), [R2](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R2_001_fastqc.html), and [R3](https://jackaloppy.github.io/bibb_multiomics/FastQC_reports/C1-ATAC_S1_L001_R3_001_fastqc.html)
-  - From the FastQC reports we can see that the quality of sequencing is good, so we need to seek good reference transcriptome.
+From the FastQC reports we can see that the quality of sequencing is good, so we need to seek good reference transcriptome.
 
-- I will also double check the pair matches. Specifically, check if C1(RNA) can matches C2(ATAC). 
+Following the [tutorial](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/tutorial_mr) from 10x, I built the rat reference libraries based on *mRatBN7.2* assembly. I'm not sure if those are paired samples, so I first analyzed the scRNA-seq and scATAC-seq separately. The QC reporst are below:
 
-- Rudra is checking the potential microbes contamination by alinging the fastq with microbiome.
+- Cell Ranger scRNA-seq
+  - C1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scrna.html)
+  - C2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scrna.html)
+  - T1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scrna.html)
+  - T2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scrna.html)
+- Cell Ranger scATAC-seq
+  - C1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scatac.html)
+  - C2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_scatac.html)
+  - T1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_scatac.html)
+  - T2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_scatac.html)
 
-### Breakthrough!!!
-- Another thing we can check is to use rat referecne. The SOP on the CyVerse folder suggests using the pre-built mouse reference from 10x, even though they are rat samples (Not sure the reasoning behind). However, 10x has the [option](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/tutorial_mr) to build a custom reference. And 
-there are rat reference library available oneline. I will see if I can incoporate that into the pipeline, to increase the mapping rate.
+From the QC reports, we can see that the quality of scRNA-seq is pretty good, but the scATAC-seq have some warnings. So I think it's better to analyze separately, so that the scATAC-seq won't affect the good quality of the scRNA-seq results. Nonetheless, I also did the Cell Ranger ARC (GEX + ATAC) pipeline, the QC reports are shown below:
 
-:exclamation::exclamation:I built rat transcriptome reference using 10x tutorial, and used it to align c1-scrna sequence in cellranger count pipeline. See [QC report](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_scrna_rat_web_summary.html). Low mapping rate alert is gone! The median genes per cell is now ~1500. All other metrics look okay to me. (Only warning _High Fraction of Reads Mapped Antisense to Genes_ is OK because it's normal in single nuclei sequencing).
+- Cell Ranger ARC (GEX + ATAC):
+  - C1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c1_arc.html)
+  - C2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/c2_arc.html)
+  - T1: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t1_arc.html)
+  - T2: [html](https://jackaloppy.github.io/bibb_multiomics/qc_reports/t2_arc.html)
 
-I will finish the rest sequencing over the weekends. I'm also building a rat ARC reference which can be used to align ATAC and (ATAC+RNA multiome) files. I will upload the QC reports when I finished. Next I will import scRNA into Seurat to generate UMAP, import scATAC into Signac to generate UMAP for ATAC.
+
+### scRNA analysis
+Next I loaded the scRNA-seq outputs into R and used Seurat to generate the UMAP. (See [script](/scripts/analysis/scrna_analysis.R)). After integrating the four samples, I did some visualizations on data quality:
+
+![scRNA Number of cells per sample](/results/ncells_scrna.png)
+![Number of genes per cell](/results/ngenepercell_scrna.png)
+![scRNA Number of cells per sample](/results/ncells_scrna.png)
+
+See more in [folder](/results). Then I ran UMAP and annotated the clusters based on the following gene markers:
+
+- Neurons: Gad1, Gad2, Grin2a
+- Astrocytes: Gja1, Aqp4
+- Oligodendrocytes: Plp1, Mag
+- Microglia: Arhgap15, Csf1r
+
+Here is the annotated UMAP:
+![scRNA annotated UMAP](/results/annotated_umap_scrna.png)
+
+### scATAC analysis
+I loaded the scATAC-seq outputs into R and used Signac to generate the UMAP. (See [script](/scripts/analysis/scatac_analysis.R)). I had problems annotating genes to ranges for the data, so I'm only able to integrate and generate UMAP wihtout gene annotation information:
+
+![scATAC UMAP](/results/umap_scatac.png)
+
+The loupe files generated by 10X Cell Ranger ATAC pipeline are able to show UMAP with gene annotation information. I'm currently working on aggregating the ATAC outpus using Cell Ranger ATAC aggr pipeline. Then I can work on the loupe file on Loupe Broswer to get the annotated ATAC UMAP.
 
 
-### on hold
-The QC reports contain UMAP automatically generated from the pipeline, though they looks pretty noisy. I will analyze the pipeline outputs in Seurat to see if I can further clean the data and produce some good UMAPs. But I think we should address the low mapping rate first.
