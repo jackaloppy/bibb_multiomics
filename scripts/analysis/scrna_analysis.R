@@ -130,3 +130,26 @@ select.cells <- CellSelector(plot=DimPlot(merged_obj,reduction="umap.cca"))
 Idents(merged_obj, cells=select.cells) <- "OPC"
 
 saveRDS(merged_obj, file="./data/merged.rds")
+
+merged_obj <- readRDS("./data/merged_scrna.rds")
+DefaultAssay(merged_obj)
+VlnPlot(merged_obj, features = c("nFeature_RNA","nCount_RNA","mitoRatio"), 
+        group.by = "orig.ident", pt.size=0)
+
+tc1_micro_marker <- TC1 %>% FindMarkers(ident.1 = "T1", subset.ident="Astrocyte",
+                                         group.by="orig.ident", assay="RNA", min.pct = 0.25) %>% 
+                        dplyr::filter(p_val_adj <= 0.05)
+tc2_micro_marker <- TC2 %>% FindMarkers(ident.1 = "T2", subset.ident="Astrocyte",
+                                         group.by="orig.ident", assay="RNA", min.pct = 0.25) %>% 
+  dplyr::filter(p_val_adj <= 0.05)
+
+write.csv(tc1_micro_marker, "./results/tc1_astro_marker.csv")
+write.csv(tc2_micro_marker, "./results/tc2_astro_marker.csv")
+
+DotPlot(TC1,features=rownames(tc1_neuron_marker), group.by="orig.ident", 
+        idents="Microglia",assay="RNA",cols = c("blue","red"), scale=FALSE)+RotatedAxis()+ylab("Microglia")
+
+DotPlot(TC2,features=tc2_neuron_marker, group.by="orig.ident", 
+        idents="Microglia",assay="RNA",cols = c("blue","red"))+RotatedAxis()+ylab("Microglia")
+
+FeaturePlot(TC1, features="C1qa", split.by="orig.ident")
